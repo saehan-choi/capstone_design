@@ -60,20 +60,19 @@ VGG_types = {
 
 
 class VGG_net(nn.Module):
-    def __init__(self, in_channels=3, num_classes=3):
+    def __init__(self, in_channels=3, num_classes=2):
         super(VGG_net, self).__init__()
         self.in_channels = in_channels
-        self.conv_layers = self.create_conv_layers(VGG_types["VGG16"])
+        self.conv_layers = self.create_conv_layers(VGG_types["VGG19"])
 
         self.fcs = nn.Sequential(
-            nn.Linear(512 * 7 * 7, 496),
+            nn.Linear(512 * 7 * 7, 4096),
             nn.ReLU(),
-            nn.Dropout(p=0.2),
             # 이거 4096 에 dropout 0.5였음
-            nn.Linear(496, 496),
+            nn.Linear(4096, 4096),
             nn.ReLU(),
-            nn.Dropout(p=0.2),
-            nn.Linear(496, num_classes),
+            nn.Dropout(0.2),
+            nn.Linear(4096, num_classes),
         )
 
     def forward(self, x):
@@ -102,6 +101,7 @@ class VGG_net(nn.Module):
                     nn.ReLU(),
                 ]
                 in_channels = x
+
             elif x == "M":
                 layers += [nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2))]
 

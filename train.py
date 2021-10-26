@@ -9,32 +9,34 @@ from torchvision import transforms
 from torchvision.datasets import ImageFolder
 
 device = torch.device('cuda')
-model = VGG_net(in_channels=3, num_classes=3)
+model = VGG_net(in_channels=3, num_classes=2)
 model = model.to(device)
 
-optimizer = optim.Adam(model.parameters(), lr=0.00001)
+optimizer = optim.Adam(model.parameters(), lr=0.0001)
 # parameters 말고 parameters()임.
 criterion = nn.CrossEntropyLoss().cuda()
 
+
+
 train_data = ImageFolder("./train", 
                             transform=transforms.Compose
-                            ([transforms.Resize(256),
+                            ([transforms.Resize(226),
                             transforms.RandomCrop(224),
                             transforms.ToTensor(),
                             transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
                             ])
                         )
-train_loader = DataLoader(train_data, batch_size=10, shuffle=True)
+train_loader = DataLoader(train_data, batch_size=25, shuffle=True)
 
 val_data = ImageFolder("./validation", 
                             transform=transforms.Compose
-                            ([transforms.Resize(256),
+                            ([transforms.Resize(226),
                             transforms.RandomCrop(224),
                             transforms.ToTensor(),
                             transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
                             ])
                         )
-val_loader = DataLoader(val_data, batch_size=10, shuffle=True)
+val_loader = DataLoader(val_data, batch_size=25, shuffle=True)
 
 train_loss_arr = []
 train_acc_arr = []
@@ -51,14 +53,17 @@ for epoch in range(1,11):
         inputs, labels = data
         inputs, labels = inputs.to(device), labels.to(device)
         # zero the parameter gradients
-        outputs = model(inputs.to("cuda"))
+        outputs = model(inputs)
         _, predicted = torch.max(outputs, 1)
         loss = criterion(outputs, labels)
+        optimizer.zero_grad()
+        # zero_grad를 안해줘서 정확도가 처음에 안나왔음 ㅠㅠㅠㅠㅠ
+        # 지금은 잘 나옴!
         loss.backward()
         optimizer.step()
         train_loss += loss.item()
-        train_correct += (predicted == labels).cpu().sum()
-    
+        train_correct += (predicted == labels).cpu().sum()        
+        
     with torch.no_grad():
         val_loss = 0.0
         val_correct = 0
@@ -89,6 +94,8 @@ for epoch in range(1,11):
     print(f'epoch step :{epoch}')
 
     
+print(f'train_acc_arr is : {train_acc_arr}')
+
 
 save_model(model)
 make_graph(train_loss_arr, val_loss_arr, train_acc_arr, val_acc_arr, epoch_arr)
