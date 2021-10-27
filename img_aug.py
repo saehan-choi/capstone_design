@@ -9,4 +9,4 @@ img = Augmentor.Pipeline("./train/2xxx/")
 # img.zoom(probability=0.6, min_factor=1.1, max_factor=1.2)
 ## 증강 이미지 수
 img.random_erasing(1,0.2)
-img.sample(200)
+img.sample(500)

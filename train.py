@@ -44,7 +44,7 @@ val_loss_arr = []
 val_acc_arr = []
 epoch_arr = []
 
-for epoch in range(1,11):
+for epoch in range(1,31):
     train_loss = 0.0
     train_correct = 0
     
