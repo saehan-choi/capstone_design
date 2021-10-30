@@ -60,7 +60,7 @@ VGG_types = {
 
 
 class VGG_net(nn.Module):
-    def __init__(self, in_channels=3, num_classes=2):
+    def __init__(self, in_channels=3, num_classes=3):
         super(VGG_net, self).__init__()
         self.in_channels = in_channels
         self.conv_layers = self.create_conv_layers(VGG_types["VGG19"])
