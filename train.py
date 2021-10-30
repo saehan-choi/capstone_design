@@ -9,7 +9,7 @@ from torchvision import transforms
 from torchvision.datasets import ImageFolder
 
 device = torch.device('cuda')
-model = VGG_net(in_channels=3, num_classes=2)
+model = VGG_net(in_channels=3, num_classes=3)
 model = model.to(device)
 
 optimizer = optim.Adam(model.parameters(), lr=0.0001)
@@ -44,10 +44,10 @@ val_loss_arr = []
 val_acc_arr = []
 epoch_arr = []
 
-for epoch in range(1,31):
+for epoch in range(1,16):
     train_loss = 0.0
     train_correct = 0
-    
+
     for i, data in enumerate(train_loader, 0):
         # get the inputs
         inputs, labels = data
@@ -99,4 +99,3 @@ print(f'train_acc_arr is : {train_acc_arr}')
 
 save_model(model)
 make_graph(train_loss_arr, val_loss_arr, train_acc_arr, val_acc_arr, epoch_arr)
-
