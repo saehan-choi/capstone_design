@@ -60,10 +60,10 @@ VGG_types = {
 
 
 class VGG_net(nn.Module):
-    def __init__(self, in_channels=3, num_classes=3):
+    def __init__(self, in_channels=3, num_classes=2):
         super(VGG_net, self).__init__()
         self.in_channels = in_channels
-        self.conv_layers = self.create_conv_layers(VGG_types["VGG19"])
+        self.conv_layers = self.create_conv_layers(VGG_types["VGG16"])
 
         self.fcs = nn.Sequential(
             nn.Linear(512 * 7 * 7, 4096),
@@ -72,7 +72,7 @@ class VGG_net(nn.Module):
             nn.Linear(4096, 4096),
             nn.ReLU(),
             nn.Dropout(0.2),
-            nn.Linear(4096, num_classes),
+            nn.Linear(4096, 2)
         )
 
     def forward(self, x):

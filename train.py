@@ -9,7 +9,7 @@ from torchvision import transforms
 from torchvision.datasets import ImageFolder
 
 device = torch.device('cuda')
-model = VGG_net(in_channels=3, num_classes=3)
+model = VGG_net(in_channels=3, num_classes=2)
 model = model.to(device)
 
 optimizer = optim.Adam(model.parameters(), lr=0.0001)
@@ -36,7 +36,7 @@ val_data = ImageFolder("./validation",
                             transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
                             ])
                         )
-val_loader = DataLoader(val_data, batch_size=25, shuffle=True)
+val_loader = DataLoader(val_data, batch_size=25, shuffle=False)
 
 train_loss_arr = []
 train_acc_arr = []
